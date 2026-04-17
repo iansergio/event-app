@@ -1,4 +1,4 @@
-# event-api
+<!-- # event-api
 
 ## 📁 Endpoints
 
@@ -55,4 +55,4 @@ Content-Type: application/json
   "status": "FINISHED",
   "requesterId": "d2c4d9b2-5e63-4bd8-88fb-9f8d0f2b7a11"
 }
-```
+``` -->

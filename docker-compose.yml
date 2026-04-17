@@ -8,18 +8,27 @@ services:
       POSTGRES_DB: events
     ports:
       - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
 
   rabbitmq:
     image: rabbitmq:4.0-management
     container_name: events_mq
     ports:
-      - "5672:5672"      # AMQP
-      - "15672:15672"    # Painel Web
-    volumes:
-      - rabbitmq_data:/var/lib/rabbitmq
+      - "5672:5672"
+      - "15672:15672"
 
-volumes:
-  postgres_data:
-  rabbitmq_data:
+  event-api:
+    build: ./event-api
+    container_name: event_api
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+      - rabbitmq
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/events
+      SPRING_DATASOURCE_USERNAME: docker
+      SPRING_DATASOURCE_PASSWORD: docker
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: guest
+      SPRING_RABBITMQ_PASSWORD: guest
