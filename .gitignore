@@ -1,0 +1,105 @@
+# Documentation
+HELP.md
+README.md.bak
+
+# Maven
+target/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+*.pom
+
+# Gradle
+.gradle/
+build/
+*.gradle
+!gradle-wrapper.jar
+
+# STS (Spring Tool Suite)
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+*.iml.xml
+.idea_modules/
+out/
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# VS Code
+.vscode/
+.settings.json
+*.code-workspace
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# OS
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+*.swp
+*.swo
+*~
+.directory
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+logs/
+*.log.*
+
+# IDE
+.c9/
+*.launch
+vscodium.json
+
+# Docker
+.docker/
+docker-compose.override.yml
+
+# System
+*.pem
+*.key
+.AppleDouble
+.LSOverride
+
+# Misc
+*.class
+*.jar
+!.mvn/wrapper/maven-wrapper.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Backup files
+*.bak
+*.backup
+*~
+
+.vscode
+.github
+/auth-service
