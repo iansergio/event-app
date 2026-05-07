@@ -1,13 +1,12 @@
-package com.events_service.interfaces.rest;
+package com.events_service.adapter;
 
-import com.events_service.application.event.CreateEventHandler;
-import com.events_service.application.event.ListEventsHandler;
-import com.events_service.application.event.ManageEventStatusHandler;
-import com.events_service.domain.event.Event;
-import com.events_service.interfaces.rest.dto.EventRequest;
-import com.events_service.interfaces.rest.dto.EventResponse;
-import com.events_service.interfaces.rest.dto.EventStatusRequest;
-import jakarta.validation.Valid;
+import com.events_service.application.CreateEventUseCase;
+import com.events_service.application.ListEventsUseCase;
+import com.events_service.application.ManageEventStatusUseCase;
+import com.events_service.domain.Event;
+import com.events_service.adapter.dto.EventRequest;
+import com.events_service.adapter.dto.EventResponse;
+import com.events_service.adapter.dto.EventStatusRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,11 +19,11 @@ import java.util.UUID;
 @RequestMapping("/events")
 public class EventController {
 
-    private final ListEventsHandler listEventsHandler;
-    private final CreateEventHandler createEventHandler;
-    private final ManageEventStatusHandler manageEventStatusHandler;
+    private final ListEventsUseCase listEventsHandler;
+    private final CreateEventUseCase createEventHandler;
+    private final ManageEventStatusUseCase manageEventStatusHandler;
 
-    public EventController(ListEventsHandler listEventsHandler, CreateEventHandler createEventHandler, ManageEventStatusHandler manageEventStatusHandler) {
+    public EventController(ListEventsUseCase listEventsHandler, CreateEventUseCase createEventHandler, ManageEventStatusUseCase manageEventStatusHandler) {
         this.listEventsHandler = listEventsHandler;
         this.createEventHandler = createEventHandler;
         this.manageEventStatusHandler = manageEventStatusHandler;
@@ -58,7 +57,7 @@ public class EventController {
     }
 
     @PostMapping
-    public ResponseEntity<EventResponse> create(@Valid @RequestBody EventRequest request) {
+    public ResponseEntity<EventResponse> create( @RequestBody EventRequest request) {
         Event event = createEventHandler.handleSave(request);
         URI location = URI.create("/events/" + event.getEventId());
 

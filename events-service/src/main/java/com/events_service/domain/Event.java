@@ -1,7 +1,7 @@
-package com.events_service.domain.event;
+package com.events_service.domain;
 
-import com.events_service.domain.event.vo.Address;
-import com.events_service.domain.event.vo.Status;
+import com.events_service.domain.vo.Address;
+import com.events_service.domain.vo.Status;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

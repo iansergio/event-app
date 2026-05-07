@@ -1,21 +1,21 @@
-package com.events_service.application.event;
+package com.events_service.application;
 
-import com.events_service.domain.event.Event;
-import com.events_service.domain.event.EventRepository;
+import com.events_service.domain.Event;
+import com.events_service.domain.EventRepository;
 
-import com.events_service.domain.event.vo.Status;
+import com.events_service.domain.vo.Status;
 import com.events_service.infrastructure.messaging.EventProducer;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
 @Service
-public class ManageEventStatusHandler {
+public class ManageEventStatusUseCase {
 
     private final EventRepository eventRepository;
     private final EventProducer eventProducer;
 
-    public ManageEventStatusHandler(EventRepository eventRepository, EventProducer eventProducer) {
+    public ManageEventStatusUseCase(EventRepository eventRepository, EventProducer eventProducer) {
         this.eventRepository = eventRepository;
         this.eventProducer = eventProducer;
     }

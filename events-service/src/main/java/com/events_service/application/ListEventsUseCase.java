@@ -1,17 +1,17 @@
-package com.events_service.application.event;
+package com.events_service.application;
 
-import com.events_service.domain.event.Event;
-import com.events_service.domain.event.EventRepository;
+import com.events_service.domain.Event;
+import com.events_service.domain.EventRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class ListEventsHandler {
+public class ListEventsUseCase {
 
     private final EventRepository eventRepository;
 
-    public ListEventsHandler(EventRepository eventRepository) {
+    public ListEventsUseCase(EventRepository eventRepository) {
         this.eventRepository = eventRepository;
     }
 

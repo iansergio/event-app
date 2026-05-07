@@ -1,4 +1,4 @@
-package com.events_service.domain.event.vo;
+package com.events_service.domain.vo;
 
 import jakarta.persistence.Embeddable;
 import lombok.Getter;

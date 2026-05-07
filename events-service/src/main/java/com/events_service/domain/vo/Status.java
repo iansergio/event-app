@@ -1,4 +1,4 @@
-package com.events_service.domain.event.vo;
+package com.events_service.domain.vo;
 
 public enum Status {
     PLANNED,

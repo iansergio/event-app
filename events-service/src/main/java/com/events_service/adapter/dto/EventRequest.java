@@ -1,7 +1,7 @@
-package com.events_service.interfaces.rest.dto;
+package com.events_service.adapter.dto;
 
-import com.events_service.domain.event.vo.Address;
-import com.events_service.domain.event.vo.Status;
+import com.events_service.domain.vo.Address;
+import com.events_service.domain.vo.Status;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDate;

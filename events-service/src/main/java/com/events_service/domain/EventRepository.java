@@ -1,4 +1,4 @@
-package com.events_service.domain.event;
+package com.events_service.domain;
 
 import java.util.List;
 import java.util.Optional;

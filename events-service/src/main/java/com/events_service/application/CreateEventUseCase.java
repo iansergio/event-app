@@ -1,19 +1,19 @@
-package com.events_service.application.event;
+package com.events_service.application;
 
-import com.events_service.domain.event.Event;
-import com.events_service.domain.event.EventRepository;
-import com.events_service.domain.event.vo.Address;
+import com.events_service.domain.Event;
+import com.events_service.domain.EventRepository;
+import com.events_service.domain.vo.Address;
 import com.events_service.infrastructure.messaging.EventProducer;
-import com.events_service.interfaces.rest.dto.EventRequest;
+import com.events_service.adapter.dto.EventRequest;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CreateEventHandler {
+public class CreateEventUseCase {
 
     private final EventRepository eventRepository;
     private final EventProducer eventProducer;
 
-    public CreateEventHandler(EventRepository eventRepository, EventProducer eventProducer) {
+    public CreateEventUseCase(EventRepository eventRepository, EventProducer eventProducer) {
         this.eventRepository = eventRepository;
         this.eventProducer = eventProducer;
     }

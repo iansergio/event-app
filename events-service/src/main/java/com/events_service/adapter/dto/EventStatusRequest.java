@@ -1,6 +1,6 @@
-package com.events_service.interfaces.rest.dto;
+package com.events_service.adapter.dto;
 
-import com.events_service.domain.event.vo.Status;
+import com.events_service.domain.vo.Status;
 
 import java.util.UUID;
 
