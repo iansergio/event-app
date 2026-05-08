@@ -99,6 +99,3 @@ docker-compose.override.yml
 *.bak
 *.backup
 *~
-
-.vscode
-.github
