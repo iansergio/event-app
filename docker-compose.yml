@@ -1,9 +1,8 @@
 services:
   postgres:
-    image: postgres:18-alpine
+    image: postgres:17-alpine
     container_name: events_db
-    networks:
-      - backend
+    restart: unless-stopped
     environment:
       POSTGRES_USER: docker
       POSTGRES_PASSWORD: docker
@@ -12,26 +11,20 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-
-  adminer:
-    image: adminer
-    container_name: events_adminer
-    restart: unless-stopped
-    ports:
-      - "8081:8080"
     networks:
       - backend
 
   rabbitmq:
-    image: rabbitmq:4.0-management-alpine
+    image: rabbitmq:4-management-alpine
     container_name: events_mq
-    networks:
-      - backend
+    restart: unless-stopped
     ports:
-      - "5672:5672"
+      - "5673:5672"
       - "15672:15672"
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - backend
 
 networks:
   backend:
