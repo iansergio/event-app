@@ -9,18 +9,18 @@ import java.util.List;
 @Service
 public class ListEventsUseCase {
 
-    private final EventRepository eventRepository;
+	private final EventRepository eventRepository;
 
-    public ListEventsUseCase(EventRepository eventRepository) {
-        this.eventRepository = eventRepository;
-    }
+	public ListEventsUseCase(EventRepository eventRepository) {
+		this.eventRepository = eventRepository;
+	}
 
-    public List<Event> handleAll() {
-        return eventRepository.findAll();
-    }
+	public List<Event> handleAll() {
+		return eventRepository.findAll();
+	}
 
-    public List<Event> handleByTitle(String title) {
-        return eventRepository.findAllByTitle(title);
-    }
+	public List<Event> handleByTitle(String title) {
+		return eventRepository.findAllByTitle(title);
+	}
 
 }

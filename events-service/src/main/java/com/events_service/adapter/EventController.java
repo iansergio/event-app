@@ -2,97 +2,59 @@ package com.events_service.adapter;
 
 import com.events_service.application.CreateEventUseCase;
 import com.events_service.application.ListEventsUseCase;
-import com.events_service.application.ManageEventStatusUseCase;
 import com.events_service.domain.Event;
 import com.events_service.adapter.dto.EventRequest;
-import com.events_service.adapter.dto.EventResponse;
-import com.events_service.adapter.dto.EventStatusRequest;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/events")
+@RequestMapping("/api/events")
 public class EventController {
 
-    private final ListEventsUseCase listEventsHandler;
-    private final CreateEventUseCase createEventHandler;
-    private final ManageEventStatusUseCase manageEventStatusHandler;
-
-    public EventController(ListEventsUseCase listEventsHandler, CreateEventUseCase createEventHandler, ManageEventStatusUseCase manageEventStatusHandler) {
-        this.listEventsHandler = listEventsHandler;
-        this.createEventHandler = createEventHandler;
-        this.manageEventStatusHandler = manageEventStatusHandler;
+    private final CreateEventUseCase useCase;
+    private final ListEventsUseCase listEventsUseCase;
+    
+    public EventController(CreateEventUseCase useCase, ListEventsUseCase listEventsUseCase) {
+        this.useCase = useCase;
+        this.listEventsUseCase = listEventsUseCase;
     }
 
-    @GetMapping
-    public ResponseEntity<List<EventResponse>> listAll() {
-        List<Event> events = listEventsHandler.handleAll();
-
-        List<EventResponse> responses = events
-                .stream()
-                .map(this::toResponse)
-                .toList();
-
-        return ResponseEntity.ok(responses);
-    }
-
-    @GetMapping("/{eventTitle}")
-    public ResponseEntity<?> findAllByTitle(@PathVariable String eventTitle) {
-        List<EventResponse> responses = listEventsHandler.handleByTitle(eventTitle)
-                .stream()
-                .map(this::toResponse)
-                .toList();
-
-        if (responses.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Nenhum evento encontrado com o título '" + eventTitle + "'");
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping
+    public ResponseEntity<?> create(@RequestBody EventRequest request, Authentication authentication) {
+        if (authentication == null || authentication.getPrincipal() == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Usuario nao autenticado");
         }
 
-        return ResponseEntity.ok(responses);
+        UUID organizerId = UUID.fromString(authentication.getPrincipal().toString());
+
+        Event newEvent = useCase.execute(request, organizerId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(newEvent);
     }
 
-    @PostMapping
-    public ResponseEntity<EventResponse> create( @RequestBody EventRequest request) {
-        Event event = createEventHandler.handleSave(request);
-        URI location = URI.create("/events/" + event.getEventId());
-
-        EventResponse response = toResponse(event);
-
-        return ResponseEntity
-                .created(location)
-                .body(response);
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @GetMapping
+    public ResponseEntity<List<Event>> listAll(Authentication authentication) {
+        return ResponseEntity.ok(listEventsUseCase.handleAll());
     }
 
-    private EventResponse toResponse(Event event) {
-        return new EventResponse(
-                event.getEventId(),
-                event.getTitle(),
-                event.getDescription(),
-                event.getAddress(),
-                event.getStatus(),
-                event.getEventDate(),
-                event.getOrganizerId(),
-                event.getCreatedAt()
-        );
-    }
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @GetMapping("/{eventTitle}")
+    public ResponseEntity<List<Event>> findAllByTitle(@PathVariable String eventTitle, Authentication authentication) {
+        List<Event> events = listEventsUseCase.handleByTitle(eventTitle);
 
-    @PatchMapping("/{eventId}/status")
-    public ResponseEntity<EventResponse> updateStatus(
-            @PathVariable UUID eventId,
-            @RequestBody EventStatusRequest request ) {
+        if (events.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
 
-        Event updatedEvent = manageEventStatusHandler.handle(
-                eventId,
-                request.status(),
-                request.requesterId()
-        );
-
-        EventResponse response = toResponse(updatedEvent);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(events);
     }
 }

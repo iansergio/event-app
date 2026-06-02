@@ -2,43 +2,34 @@ package com.events_service.application;
 
 import com.events_service.domain.Event;
 import com.events_service.domain.EventRepository;
-import com.events_service.domain.vo.Address;
-import com.events_service.infrastructure.messaging.EventProducer;
 import com.events_service.adapter.dto.EventRequest;
+
+import java.util.UUID;
+
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CreateEventUseCase {
 
-    private final EventRepository eventRepository;
-    private final EventProducer eventProducer;
+    private final EventRepository repository;
 
-    public CreateEventUseCase(EventRepository eventRepository, EventProducer eventProducer) {
-        this.eventRepository = eventRepository;
-        this.eventProducer = eventProducer;
+    public CreateEventUseCase(EventRepository repository) {
+        this.repository = repository;
     }
 
-    public Event handleSave(EventRequest request) {
+    @Transactional
+    public Event execute(EventRequest request, UUID organizerId) {
 
-        Address address = Address.of(
-                request.address().getStreet(),
-                request.address().getNumber(),
-                request.address().getCity(),
-                request.address().getState(),
-                request.address().getZipCode()
+        Event newEvent = new Event(
+            request.title(), 
+            request.dateTime(),
+            request.address(), 
+            organizerId
         );
 
-        Event event = new Event(
-                request.title(),
-                request.description(),
-                address,
-                request.eventDate(),
-                request.organizerId()
-        );
+        return repository.save(newEvent);
 
-        Event savedEvent = eventRepository.save(event);
-
-        eventProducer.send("(RABBITMQ) - ✅ Novo evento criado: " + savedEvent.getTitle());
-        return savedEvent;
+        // producer.send(newEvent.getId());
     }
 }
